@@ -36,6 +36,25 @@ const Carousel = ({ imageUrls, title }) => {
         style="text"
         onClick={handleNext}
       />
+      <div className="flex space-x-1">
+        {imageUrls.map((_, index) => {
+          const defaultClasses =
+            "neeto-ui-border-black neeto-ui-rounded-full h-3 w-3 cursor-pointer border";
+
+          const dotClassNames =
+            index === currentIndex
+              ? defaultClasses.concat(" neeto-ui-bg-black")
+              : defaultClasses;
+
+          return (
+            <span
+              className={dotClassNames}
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
