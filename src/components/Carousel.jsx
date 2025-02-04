@@ -8,14 +8,13 @@ const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % imageUrls.length;
-    setCurrentIndex(nextIndex);
+    setCurrentIndex(previousIndex => (previousIndex + 1) % imageUrls.length);
   };
 
   const handlePrevious = () => {
-    const previousIndex =
-      (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-    setCurrentIndex(previousIndex);
+    setCurrentIndex(
+      previousIndex => (previousIndex - 1 + imageUrls.length) % imageUrls.length
+    );
   };
 
   return (
