@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import classNames from "classnames";
 import { Left, Right } from "neetoicons";
@@ -7,20 +7,29 @@ import { Button } from "neetoui";
 const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const intervalId = setInterval(handleNext, 3000);
+  const timerRef = useRef(null);
 
-    return () => clearInterval(intervalId);
+  useEffect(() => {
+    timerRef.current = setInterval(handleNext, 3000);
+
+    return () => clearInterval(timerRef.current);
   }, []);
+
+  const resetTimer = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(handleNext, 3000);
+  };
 
   const handleNext = () => {
     setCurrentIndex(previousIndex => (previousIndex + 1) % imageUrls.length);
+    resetTimer();
   };
 
   const handlePrevious = () => {
     setCurrentIndex(
       previousIndex => (previousIndex - 1 + imageUrls.length) % imageUrls.length
     );
+    resetTimer();
   };
 
   return (
