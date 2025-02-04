@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import classNames from "classnames";
 import { Left, Right } from "neetoicons";
 import { Button } from "neetoui";
 
@@ -41,15 +42,12 @@ const Carousel = ({ imageUrls, title }) => {
           const defaultClasses =
             "neeto-ui-border-black neeto-ui-rounded-full h-3 w-3 cursor-pointer border";
 
-          const dotClassNames =
-            index === currentIndex
-              ? defaultClasses.concat(" neeto-ui-bg-black")
-              : defaultClasses;
-
           return (
             <span
-              className={dotClassNames}
               key={index}
+              className={classNames(defaultClasses, {
+                "neeto-ui-bg-black": index === currentIndex,
+              })}
               onClick={() => setCurrentIndex(index)}
             />
           );
