@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
 
 import productsApi from "apis/products";
+import Header from "components/commons/Header";
 import PageLoader from "components/commons/PageLoader";
-import { Typography } from "neetoui";
+import { Search } from "neetoicons";
+import { Input, NoData } from "neetoui";
+import { isEmpty } from "ramda";
 
 import ProductListItem from "./ProductListItem";
 
-const Home = () => {
+const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProducts = async () => {
     try {
-      const response = await productsApi.fetch();
+      console.log(searchKey);
+      const response = await productsApi.fetch({ searchTerm: searchKey });
       setProducts(response.products);
+      console.log(products);
     } catch (error) {
       console.log(error);
     } finally {
@@ -23,25 +29,36 @@ const Home = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [searchKey]);
 
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="flex flex-col">
-      <div className="m-2">
-        <Typography className="mx-6 mb-2 mt-6" style="h1" weight="semibold">
-          Smile Cart
-        </Typography>
-        <hr className="neeto-ui-bg-black h-1" />
-      </div>
-      <div className="grid grid-cols-2 justify-items-center gap-y-8 p-4 md:grid-cols-3 lg:grid-cols-4">
-        {products.map(product => (
-          <ProductListItem key={product.slug} {...product} />
-        ))}
-      </div>
+    <div className="flex h-screen flex-col">
+      <Header
+        shouldShowBackButton={false}
+        title="Smile Cart"
+        actionBlock={
+          <Input
+            placeholder="Search products"
+            prefix={<Search />}
+            type="search"
+            value={searchKey}
+            onChange={event => setSearchKey(event.target.value)}
+          />
+        }
+      />
+      {isEmpty(products) ? (
+        <NoData className="h-full w-full" title="No products to show" />
+      ) : (
+        <div className="grid grid-cols-2 justify-items-center gap-y-8 p-4 md:grid-cols-3 lg:grid-cols-4">
+          {products.map(product => (
+            <ProductListItem key={product.slug} {...product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default Home;
+export default ProductList;
