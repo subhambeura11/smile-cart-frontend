@@ -32,7 +32,6 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
       setSelectedQuantity(value);
     }
   };
-  console.log(selectedQuantity);
 
   return (
     <div className="neeto-ui-border-black neeto-ui-rounded inline-flex flex-row items-center border">
