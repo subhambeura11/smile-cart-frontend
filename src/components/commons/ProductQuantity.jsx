@@ -2,16 +2,20 @@ import { useRef } from "react";
 
 import { TooltipWrapper } from "components/commons";
 import { VALID_COUNT_REGEX } from "components/constants";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/UseSelectedQuantity";
 import { Toastr, Input, Button } from "neetoui";
 import { useTranslation } from "react-i18next";
 
-const ProductQuantity = ({ slug, availableQuantity }) => {
+const ProductQuantity = ({ slug }) => {
   const { t } = useTranslation();
+
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
   const countInputFocus = useRef(null);
 
+  const { data: product = {} } = useShowProduct(slug);
+  const { availableQuantity } = product;
   const parsedSelectedQuantity = parseInt(selectedQuantity) || 0;
   const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity;
 
@@ -23,6 +27,7 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
       const errorMessage = t("error.quantityLimit", {
         count: availableQuantity,
       });
+
       Toastr.error(errorMessage, { autoClose: 2000 });
       setSelectedQuantity(availableQuantity);
       countInputFocus.current.blur();
