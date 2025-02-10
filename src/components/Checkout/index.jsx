@@ -8,16 +8,23 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import withTitle from "utils/withTitle";
 
-import { CHECKOUT_FORM_INITIAL_VALUES } from "./constants";
+import {
+  CHECKOUT_FORM_INITIAL_VALUES,
+  CHECKOUT_FORM_VALIDATION_SCHEMA,
+} from "./constants";
 import Form from "./Form";
 
 const Checkout = () => {
   const { t } = useTranslation();
+
   const history = useHistory();
+
   const { isLoading } = useFetchCountries();
+
   const handleRedirect = () => {
     history.goBack();
   };
+
   if (isLoading) return <PageLoader />;
 
   return (
@@ -25,6 +32,7 @@ const Checkout = () => {
       formProps={{ noValidate: true }}
       formikProps={{
         initialValues: CHECKOUT_FORM_INITIAL_VALUES,
+        validationSchema: CHECKOUT_FORM_VALIDATION_SCHEMA,
       }}
     >
       <div className="flex space-x-4">
@@ -55,4 +63,5 @@ const Checkout = () => {
     </NeetoUIForm>
   );
 };
+
 export default withTitle(Checkout, i18n.t("checkout"));
